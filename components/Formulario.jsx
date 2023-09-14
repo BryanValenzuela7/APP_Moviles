@@ -1,10 +1,47 @@
-import { StyleSheet,Modal, SafeAreaView, Text, Button, TextInput, View, Pressable, StatusBar, ScrollView } from "react-native"
+import { StyleSheet,Modal, SafeAreaView, Text, Button, TextInput, View, Pressable, StatusBar, ScrollView, Alert } from "react-native"
 import CustomButton from "./Button"
 import DatePicker from "react-native-date-picker"
 import React, { useState } from 'react';
-const Formulario =({modalVisible, newDateHandler}) =>{
+const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes}) =>{
+   
+    const [paciente, setPaciente] = useState('')
+    const [propietario, setPropietario] = useState('')
+    const [email, setEmail] = useState('')
+    const [telefono, setTelefono] = useState('')
     const [date, setDate] = useState(new Date())
+    const [sintomas, setSintomas] = useState('')
 
+    const handleAppointment =() =>{
+        if([paciente, propietario, email,telefono,sintomas].includes('')){
+            Alert.alert(
+                'Error',
+                'Todos los campos son obligatorios',
+                [{text:'Entendido'}],
+            )
+            return  
+        }
+
+        const nuevoPaciente ={
+            paciente,
+            propietario,
+            email,
+            telefono,
+            date,
+            sintomas
+        }
+        setPacientes([...pacientes,nuevoPaciente])
+        ClearFields()
+        newDateHandler();
+
+    }
+    const ClearFields =() =>{
+        setPaciente('')
+        setPropietario('')
+        setEmail('')
+        setTelefono('')
+        setDate(new Date())
+        setSintomas('')
+    }
     return(
         <Modal animationType='slide' visible={modalVisible}>
             <StatusBar backgroundColor={'#333'}/>
@@ -22,22 +59,39 @@ const Formulario =({modalVisible, newDateHandler}) =>{
         <View style={styles.group}>
             <Text style={styles.label}>Nombre Paciente</Text>
             <TextInput 
+            value={paciente}
+            onChangeText={setPaciente}
             style={styles.input}
             placeholder="Nombre paciente" 
-            placeholderTextColor={''}/>
+            placeholderTextColor={''}
+            
+            />
 
             <Text style={styles.label}>Nombre propietario</Text>
             <TextInput 
+             value={propietario}
+             onChangeText={setPropietario}
             style={styles.input}
             placeholder="Nombre propietario" 
             placeholderTextColor={''}/>
 
             <Text style={styles.label}>Email propietario</Text>
             <TextInput 
+             value={email}
+             onChangeText={setEmail}
             style={styles.input}
             placeholder="Email propietario" 
             placeholderTextColor={''}
             keyboardType='email-address'
+            />
+             <Text style={styles.label}>Telefono propietario</Text>
+            <TextInput 
+             value={telefono}
+             onChangeText={setTelefono}
+            style={styles.input}
+            placeholder="Telefono propietario" 
+            placeholderTextColor={''}
+            keyboardType='numeric'
             />
             
         </View>
@@ -45,16 +99,20 @@ const Formulario =({modalVisible, newDateHandler}) =>{
             <Text style={styles.label}>Fecha</Text>
             <DatePicker 
             date={date}
+            textColor="green"
         />
         </View>
         <TextInput style={[styles.input, styles.inputSymptoms]}
+        value={sintomas}
+        onChangeText={setSintomas}
         placeholder="Sintomas"
         multiline ={true}
         placeholderTextColor={"#666"}
         />
-        <CustomButton title ={'Registrar'}
+        <CustomButton 
+        title ={'Registrar'}
         onPress={()=>{
-            newDateHandler()
+            handleAppointment()
         }}
         customColor={'#edede9'}
         />

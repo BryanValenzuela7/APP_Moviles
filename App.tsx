@@ -18,9 +18,11 @@ type SectionProps = PropsWithChildren<{
 
 function App(): JSX.Element {
   const [modalVisible, setModalVisible] = useState(false)
+  const [pacientes, setPacientes] = useState([])
   const newDateHandler =() =>{
     setModalVisible(false)
   }
+  console.log(pacientes)
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}> Administrador de citas {''}
@@ -37,6 +39,8 @@ function App(): JSX.Element {
       <Formulario
       modalVisible={modalVisible}
       newDateHandler={newDateHandler}
+      pacientes = {pacientes}
+      setPacientes ={setPacientes}
       />
     </SafeAreaView>
   );
