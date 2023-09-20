@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  FlatList,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -34,6 +35,32 @@ function App(): JSX.Element {
       <Text style={styles.title}> Administrador de citas {''}
         <Text style={styles.titleBold}> Veterinaria</Text>
       </Text>
+      <Text style={styles.textCitasHechas}>Citas hechas</Text>
+      <FlatList
+        data={pacientes}
+        renderItem={({ item: paciente }) => (
+          <View style={styles.pacienteItem} >
+            <Text style={styles.label}>Nombre del Paciente:</Text>
+            <Text>{paciente.paciente}</Text>
+
+            <Text style={styles.label} >Propietario:</Text>
+            <Text>{paciente.propietario}</Text>
+
+            <Text style={styles.label} >Email del propietario:</Text>
+            <Text>{paciente.email}</Text>
+
+            <Text style={styles.label} >Telefono del propietario:</Text>
+            <Text>{paciente.telefono}</Text>
+
+            <Text style={styles.label} >Fecha:</Text>
+            <Text>{paciente.date.toDateString()}</Text>
+
+            <Text style={styles.label} >Sintomas:</Text>
+            <Text>{paciente.sintomas}</Text>
+          </View>
+        )}
+      />
+      {/* <ScrollView>
       <View>
       <Text style={styles.textCitasHechas}>Citas hechas</Text>
       {pacientes.map((paciente, index) => (
@@ -58,7 +85,7 @@ function App(): JSX.Element {
           </View>
         ))}
       </View>
-
+      </ScrollView> */}
       <Pressable
       style={styles.buttonStyle}
       onPress={()=>{
