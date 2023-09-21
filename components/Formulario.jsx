@@ -3,7 +3,6 @@ import CustomButton from "./Button"
 import DatePicker from "react-native-date-picker"
 import React, { useState } from 'react';
 const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes}) =>{
-   
     const [paciente, setPaciente] = useState('')
     const [propietario, setPropietario] = useState('')
     const [email, setEmail] = useState('')
@@ -22,6 +21,7 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes}) =>{
         }
 
         const nuevoPaciente ={
+            id: Date.now(),
             paciente,
             propietario,
             email,
