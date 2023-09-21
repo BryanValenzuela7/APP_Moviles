@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
+import CustomButton from './Button'
 
 const Paciente = ({item}) => {
     const {paciente, propietario,email,telefono, date,sintomas} = item
@@ -34,6 +35,17 @@ const Paciente = ({item}) => {
 
             <Text style={styles.label} >Sintomas:</Text>
             <Text>{sintomas}</Text>
+            <View style={styles.button}>
+            <CustomButton
+            title="Editar"
+            onPress={()=>{}}
+            customColor={'#333'}/>
+
+            <CustomButton
+            title="Eliminar"
+            onPress={()=>{}}
+            customColor={'#c82929'}/>
+            </View>
           </View>
     )
 }
@@ -52,6 +64,10 @@ const styles = StyleSheet.create({
     label:{
       fontWeight: 'bold'
     },
+    button:{
+        flex: 1,
+        flexDirection: 'row'
+    }
   });
 
 export default Paciente
