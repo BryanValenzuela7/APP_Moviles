@@ -16,8 +16,14 @@ import Paciente from './components/Paciente';
 function App() {
   const [modalVisible, setModalVisible] = useState(false)
   const [pacientes, setPacientes] = useState([])
+  const [pacienteActualizado, setPacienteActualizado] = useState({})
   const newDateHandler =() =>{
     setModalVisible(false)
+  }
+  const pacienteEditar = id =>{
+    const pacienteEditado = pacientes.filter(paciente => paciente.id === id)
+    setPacienteActualizado(pacienteEditado[0])
+    
   }
 
   return (
@@ -33,7 +39,7 @@ function App() {
         data={pacientes}
         keyExtractor={item => item.id}
         renderItem={({item})=>{
-          return <Paciente item={item}/>
+          return <Paciente item={item} setModalVisible={setModalVisible} pacienteEditar= {pacienteEditar}/>
         }}
         // renderItem={({ item: paciente }) => ( Aqui de la forma original que yo hice
         //   <View style={styles.pacienteItem} >
@@ -97,6 +103,7 @@ function App() {
       newDateHandler={newDateHandler}
       pacientes = {pacientes}
       setPacientes ={setPacientes}
+      pacienteActualizado = {pacienteActualizado}
       />
     </SafeAreaView>
   );

@@ -1,14 +1,19 @@
 import { StyleSheet,Modal, SafeAreaView, Text, Button, TextInput, View, Pressable, StatusBar, ScrollView, Alert } from "react-native"
 import CustomButton from "./Button"
 import DatePicker from "react-native-date-picker"
-import React, { useState } from 'react';
-const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes}) =>{
+import React, { useEffect, useState } from 'react';
+const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacienteActualizado}) =>{
     const [paciente, setPaciente] = useState('')
     const [propietario, setPropietario] = useState('')
     const [email, setEmail] = useState('')
     const [telefono, setTelefono] = useState('')
     const [date, setDate] = useState(new Date())
     const [sintomas, setSintomas] = useState('')
+
+    useEffect(()=>{
+        console.log("Actualizando paciente")
+    },
+    [pacienteActualizado])
 
     const handleAppointment =() =>{
         if([paciente, propietario, email,telefono,sintomas].includes('')){
@@ -19,7 +24,7 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes}) =>{
             )
             return  
         }
-
+        
         const nuevoPaciente ={
             id: Date.now(),
             paciente,

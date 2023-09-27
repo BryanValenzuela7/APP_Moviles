@@ -2,8 +2,8 @@ import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import CustomButton from './Button'
 
-const Paciente = ({item}) => {
-    const {paciente, propietario,email,telefono, date,sintomas} = item
+const Paciente = ({item, setModalVisible, pacienteEditar}) => {
+    const {paciente, propietario,email,telefono, date,sintomas, id} = item
 
     const formatearFecha = fecha =>{
         const nuevaFecha = new Date(fecha)
@@ -38,7 +38,10 @@ const Paciente = ({item}) => {
             <View style={styles.button}>
             <CustomButton
             title="Editar"
-            onPress={()=>{}}
+            onPress={()=>{
+              setModalVisible(true)
+              pacienteEditar(id)
+            }}
             customColor={'#333'}/>
 
             <CustomButton
