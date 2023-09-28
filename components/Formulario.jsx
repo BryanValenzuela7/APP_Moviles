@@ -2,7 +2,8 @@ import { StyleSheet,Modal, SafeAreaView, Text, Button, TextInput, View, Pressabl
 import CustomButton from "./Button"
 import DatePicker from "react-native-date-picker"
 import React, { useEffect, useState } from 'react';
-const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacienteActualizado}) =>{
+const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacienteActualizado, setPacienteActualizado}) =>{
+    const [id, setId] = useState('')
     const [paciente, setPaciente] = useState('')
     const [propietario, setPropietario] = useState('')
     const [email, setEmail] = useState('')
@@ -11,9 +12,16 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
     const [sintomas, setSintomas] = useState('')
 
     useEffect(()=>{
-        console.log("Actualizando paciente")
-    },
-    [pacienteActualizado])
+        if(Object.keys(pacienteActualizado).length > 0){
+            setId(pacienteActualizado.id)
+            setPaciente(pacienteActualizado.paciente)
+            setPropietario(pacienteActualizado.propietario)
+            setEmail(pacienteActualizado.email)
+            setTelefono(pacienteActualizado.telefono)
+            setDate(pacienteActualizado.date)
+            setSintomas(pacienteActualizado.sintomas)
+        }
+    },[pacienteActualizado])
 
     const handleAppointment =() =>{
         if([paciente, propietario, email,telefono,sintomas].includes('')){
@@ -24,9 +32,8 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
             )
             return  
         }
-        
+
         const nuevoPaciente ={
-            id: Date.now(),
             paciente,
             propietario,
             email,
@@ -34,29 +41,44 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
             date,
             sintomas
         }
-        setPacientes([...pacientes,nuevoPaciente])
+        //Revisar si el registro es nuevo o es para edicion
+        if(id){
+            //Es para editar
+            nuevoPaciente.id = id
+            const pacientesActualizados = pacientes.map(p => p.id === nuevoPaciente.id ? nuevoPaciente : p)
+            setPacientes(pacientesActualizados)
+
+        } else{
+            //Nuevo registro
+            nuevoPaciente.id = Date.now()
+            setPacientes([...pacientes,nuevoPaciente])
+        }
+
         ClearFields()
         newDateHandler();
 
     }
     const ClearFields =() =>{
+        setId('')
         setPaciente('')
         setPropietario('')
         setEmail('')
         setTelefono('')
         setDate(new Date())
         setSintomas('')
+        setPacienteActualizado({})
     }
     return(
         <Modal animationType='slide' visible={modalVisible}>
             <StatusBar backgroundColor={'#333'}/>
             <ScrollView>
         <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Nueva {''}
-            <Text style={styles.titleBold}>Cita</Text>
-        </Text>
+        {id ? <Text style={styles.title}> Editando cita </Text> : <Text style={styles.title}> Nueva cita</Text>}
+        
         <CustomButton title ={'CANCELAR'}
         onPress={()=>{
+            //Limpiamos el objeto para que no entre de nuevo            
+            ClearFields()
             newDateHandler()
         }}
         customColor={'#edede9'}
@@ -74,8 +96,8 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
 
             <Text style={styles.label}>Nombre propietario</Text>
             <TextInput 
-             value={propietario}
-             onChangeText={setPropietario}
+            value={propietario}
+            onChangeText={setPropietario}
             style={styles.input}
             placeholder="Nombre propietario" 
             placeholderTextColor={''}/>
@@ -104,6 +126,7 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
             <Text style={styles.label}>Fecha</Text>
             <DatePicker 
             date={date}
+            onDateChange={(fecha)=>{setDate(fecha)}}
             textColor="green"
         />
         </View>
@@ -115,7 +138,7 @@ const Formulario =({modalVisible, newDateHandler, setPacientes,pacientes, pacien
         placeholderTextColor={"#666"}
         />
         <CustomButton 
-        title ={'Registrar'}
+        title ={id ?  "Editando cita"  : " Nueva cita" }
         onPress={()=>{
             handleAppointment()
         }}
